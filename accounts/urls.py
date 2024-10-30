@@ -1,11 +1,13 @@
+# accounts/urls.py
 from django.urls import path
+from django.views.generic import RedirectView
 
-from CRUD.urls import urlpatterns
-from .views import SignUpView, LoginView, UserListView, UserDetailUser
+from .views import SignupView, LoginView, UserListView, UserDetailView  # Corrigido para UserDetailView
 
 urlpatterns = [
-    path('signup/', SignUpView.as_view(), name='signup'),
+    path('', RedirectView.as_view(url='/home/'), name='home'),
+    path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('user/', UserListView.as_view(), name='user-list'),
-    path('user/<int:pk>/', UserDetailUser.as_view(), name='user-detail'),
+    path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
 ]
