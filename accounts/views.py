@@ -1,6 +1,7 @@
 # accounts/views.py
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout  # Corrigido 'Login' para 'login'
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User as AuthUser  # Evitando confusão com nosso User model
 from django.shortcuts import render, redirect
 from django.views import View
@@ -22,6 +23,16 @@ class SignupView(generics.CreateAPIView):
     def get(self, request, *args, **kwargs):
         return render(request, 'signup.html')
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            #return Response(serializer.data, status=status.HTTP_201_CREATED)
+            messages.success(request, "Usuário cadastrado com sucesso. ")
+            return redirect('login')
+        messages.error(request, "Erro ao cadastrar usuário")
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return render(request, 'signup.html', {'errors': serializer.errors})
 
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer

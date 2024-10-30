@@ -1,0 +1,81 @@
+/* Estilos globais */
+body {
+    background-color: #f0f8ff; /* Azul claro para o fundo */
+    color: #333; /* Cor de texto em cinza escuro para contraste */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #0056b3; /* Azul escuro */
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    color: #fff !important; /* Branco para o texto da navbar */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #cce7ff !important; /* Azul claro para hover */
+}
+
+/* Botões */
+.btn-primary {
+    background-color: #0056b3;
+    border-color: #004494;
+}
+
+.btn-primary:hover {
+    background-color: #004494;
+    border-color: #003366;
+}
+
+/* Containers */
+.container {
+    padding: 20px;
+    background-color: #ffffff; /* Branco para áreas de conteúdo */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Cabeçalhos */
+h1, h2, h3, h4, h5, h6 {
+    color: #0056b3; /* Azul para os cabeçalhos */
+}
+
+/* Links */
+a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #004494;
+    text-decoration: underline;
+}
+
+/* Alertas */
+.alert {
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+
+.alert-success {
+    background-color: #cce7ff; /* Azul claro */
+    color: #0056b3;
+}
+
+.alert-danger {
+    background-color: #ffcccc; /* Vermelho claro */
+    color: #990000;
+}
+
+/* Rodapé */
+footer {
+    background-color: #0056b3;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 20px;
+}
