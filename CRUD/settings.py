@@ -82,7 +82,17 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+    #'default': {
+    #   'NAME': 'banco_crud_livon',        # Substitua pelo nome do seu banco de dados
+    #    'USER': 'teste_1',           # Substitua pelo seu usuário do MySQL
+    #    'PASSWORD': 'yqgDy1pS[st23zHP',         # Substitua pela sua senha do MySQL
+    #    'HOST': 'localhost',             # Endereço do servidor MySQL
+    #    'OPTIONS': {
+    #        'ssl': False         # Desativa o SSL
+    #    },
+    #}
 }
+
 
 
 # Password validation

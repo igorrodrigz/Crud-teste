@@ -16,14 +16,12 @@ Including another URLconf
 """
 # CRUD/urls.py
 from django.urls import path, include  # Adicione 'include'
+
+from accounts import urls as accounts_urls
 from accounts.views import SignupView, LoginView, UserListView, UserDetailView, LogoutView, HomePageView
 
 
 urlpatterns = [
-    path('signup/', SignupView.as_view(), name='signup'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
     path('', HomePageView.as_view(), name='home'),
-    path('users/', UserListView.as_view(), name='user-list'),  # Alterado para plural
-    path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
-]
+    path('accounts/', include(accounts_urls)), #inclui as urls do app accounts
+   ]
