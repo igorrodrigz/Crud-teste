@@ -1,34 +1,38 @@
 {% extends 'base.html' %}
 
-{% block title %}Lista de Usuários{% endblock %}
+{% block title %}Detalhes do Usuário{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Lista de Usuários</h2>
+    <h2 class="mb-4">Detalhes do Usuário: {{ user.email }}</h2>
 
-    <!-- Tabela de usuários -->
-    <table class="table table-striped">
-        <thead class="table-primary">
-            <tr>
-                <th>ID</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>
-                    <a href="{% url 'user-detail' user.id %}" class="btn btn-sm btn-info">Ver Detalhes</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4" class="text-center">Nenhum usuário encontrado.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- Informações do usuário -->
+    <ul class="list-group mb-4">
+        <li class="list-group-item"><strong>ID:</strong> {{ user.id }}</li>
+        <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+        <!-- Adicione outras informações do usuário que deseja exibir -->
+    </ul>
+
+    <!-- Formulário de edição do usuário -->
+    <form method="POST" action="{% url 'user-detail' user.id %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+        </div>
+        <!-- Adicione outros campos que deseja permitir que o usuário edite -->
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    </form>
+
+    <!-- Botão para deletar usuário -->
+    <form method="POST" action="{% url 'user-detail' user.id %}" class="mt-3">
+        {% csrf_token %}
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar este usuário?');">Deletar Usuário</button>
+    </form>
+
+    <div class="mt-4">
+        <a href="{% url 'users-list' %}" class="btn btn-secondary">Voltar à Lista de Usuários</a>
+    </div>
 </div>
 {% endblock %}

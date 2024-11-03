@@ -111,4 +111,4 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
         logout(request)
-        return redirect('login.html')
+        return redirect('login')
