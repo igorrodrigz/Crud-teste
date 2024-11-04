@@ -1,39 +1,47 @@
 {% extends "base.html" %}
 
 {% block title %}Login - Minha Aplicação{% endblock %}
-    <li class="nav-item">
-                        <a class="nav-link" href="login">Login</a>
-                    </li>
+
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Login</h1>
-    <form method="post" id="login-form">
-        {% csrf_token %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <!-- Fundo ajustável ao tamanho do formulário -->
+    <div class="bg-light shadow-lg rounded-4 p-4" style="max-width: 450px; width: 100%;">
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required placeholder="Digite seu email" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">Nós nunca compartilharemos seu email com mais ninguém.</div>
-        </div>
+        <!-- Card do Formulário -->
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                <h1 class="text-center mb-4 text-primary">Login</h1>
+                <form method="post" id="login-form">
+                    {% csrf_token %}
 
-        <div class="mb-3">
-            <label for="password" class="form-label">Senha</label>
-            <input type="password" class="form-control" id="password" name="password" required placeholder="Digite sua senha" aria-describedby="passwordHelp">
-            <div id="passwordHelp" class="form-text">A senha deve ter pelo menos 8 caracteres.</div>
-        </div>
+                    <!-- Campo Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required placeholder="Digite seu email" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">Nós nunca compartilharemos seu email com mais ninguém.</div>
+                    </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-                <a href="#">Esqueceu a senha?</a>
+                    <!-- Campo Senha -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="Digite sua senha" aria-describedby="passwordHelp">
+                        <div id="passwordHelp" class="form-text">A senha deve ter pelo menos 8 caracteres.</div>
+                    </div>
+
+                    <!-- Ações de Login -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <a href="#" class="text-muted">Esqueceu a senha?</a>
+                        <button type="submit" class="btn btn-primary px-4">Entrar</button>
+                    </div>
+                </form>
+
+                <!-- Link para Cadastro -->
+                <div class="text-center mt-3">
+                    <p class="mb-0">Não tem uma conta? <a href="{% url 'signup' %}" class="text-primary">Cadastre-se aqui</a></p>
+                </div>
             </div>
-            <div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </div>
         </div>
-    </form>
 
-    <div class="text-center mt-3">
-        <p>Não tem uma conta? <a href="{% url 'signup' %}">Cadastre-se aqui</a></p>
     </div>
 </div>
 {% endblock %}

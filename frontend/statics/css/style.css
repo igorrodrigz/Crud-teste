@@ -25,6 +25,8 @@ body {
     color: var(--gray); /* Cor de texto em cinza escuro para contraste */
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
 }
 
 /* Navbar */
@@ -53,6 +55,9 @@ body {
 
 /* Containers */
 .container {
+    max-width: 800px; /* Limite de largura */
+    width: 100%; /* Largura total para telas menores */
+    margin: 20px auto; /* Centralizar e dar espaço ao redor */
     padding: 20px;
     background-color: var(--white); /* Branco para áreas de conteúdo */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -86,7 +91,7 @@ a:hover {
     color: var(--blue);
 }
 
-.alert-danger {
+.alert-error {
     background-color: var(--light-red); /* Vermelho claro */
     color: var(--dark-red);
 }
@@ -102,6 +107,9 @@ footer {
 
 /* Estilos Responsivos */
 @media only screen and (max-width: 576px) {
+    .container {
+        padding: 10px; /* Reduzindo padding em telas menores */
+    }
     .m100 {
         margin-top: 40px;
     }

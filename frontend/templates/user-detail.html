@@ -10,12 +10,17 @@
     <ul class="list-group mb-4">
         <li class="list-group-item"><strong>ID:</strong> {{ user.id }}</li>
         <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+        <li class="list-group-item"><strong>Nome:</strong> {{  user.first_name }}</li>
         <!-- Adicione outras informações do usuário que deseja exibir -->
     </ul>
 
     <!-- Formulário de edição do usuário -->
-    <form method="POST" action="{% url 'user-detail' user.id %}">
+    <form method="POST" action="{% url 'user-detail' user.pk %}">
         {% csrf_token %}
+        <div class="mb-3">
+            <label for="first_name" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+        </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
