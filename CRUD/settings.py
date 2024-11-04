@@ -78,19 +78,18 @@ WSGI_APPLICATION = 'CRUD.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
     #'default': {
-    #   'NAME': 'banco_crud_livon',        # Substitua pelo nome do seu banco de dados
-    #    'USER': 'teste_1',           # Substitua pelo seu usuário do MySQL
-    #    'PASSWORD': 'yqgDy1pS[st23zHP',         # Substitua pela sua senha do MySQL
-    #    'HOST': 'localhost',             # Endereço do servidor MySQL
-    #    'OPTIONS': {
-    #        'ssl': False         # Desativa o SSL
-    #    },
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': BASE_DIR / 'db.sqlite3',
     #}
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',  # Endereço do servidor MySQL
+        'NAME': 'banco_mysql',
+        'USER': 'root',
+        'PASSWORD': '!Barat44',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
 }
 
 

@@ -3,41 +3,52 @@
 {% block title %}Detalhes do Usuário{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Detalhes do Usuário: {{ user.email }}</h2>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="bg-light shadow-lg rounded-4 p-4" style="max-width: 600px; width: 100%;">
 
-    <!-- Informações do usuário -->
-    <ul class="list-group mb-4">
-        <li class="list-group-item"><strong>ID:</strong> {{ user.id }}</li>
-        <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
-        <li class="list-group-item"><strong>Nome:</strong> {{  user.first_name }}</li>
-        <!-- Adicione outras informações do usuário que deseja exibir -->
-    </ul>
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4 text-primary">Detalhes do Usuário</h2>
 
-    <!-- Formulário de edição do usuário -->
-    <form method="POST" action="{% url 'user-detail' user.pk %}">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="first_name" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                <!-- Informações do Usuário -->
+                <ul class="list-group mb-4">
+                    <li class="list-group-item"><strong>ID:</strong> {{ user.id }}</li>
+                    <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+                    <li class="list-group-item"><strong>Nome:</strong> {{ user.first_name }}</li>
+                    <!-- Adicione outras informações do usuário que deseja exibir -->
+                </ul>
+
+                <!-- Formulário de Edição do Usuário -->
+                <form method="POST" action="{% url 'user-detail' user.pk %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">Nome</label>
+                        <input type="text" class="form-control rounded-pill" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control rounded-pill" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                    <!-- Adicione outros campos que deseja permitir que o usuário edite -->
+
+                    <button type="submit" class="btn btn-primary rounded-pill w-100">Salvar Alterações</button>
+                </form>
+
+                <!-- Botão para Deletar Usuário -->
+                <form method="POST" action="{% url 'user-detail' user.id %}" class="mt-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger rounded-pill w-100" onclick="return confirm('Tem certeza que deseja deletar este usuário?');">Deletar Usuário</button>
+                </form>
+
+                <!-- Link para Voltar -->
+                <div class="text-center mt-4">
+                    <a href="{% url 'users-list' %}" class="btn btn-secondary rounded-pill">Voltar à Lista de Usuários</a>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
-        </div>
-        <!-- Adicione outros campos que deseja permitir que o usuário edite -->
-        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-    </form>
 
-    <!-- Botão para deletar usuário -->
-    <form method="POST" action="{% url 'user-detail' user.id %}" class="mt-3">
-        {% csrf_token %}
-        <input type="hidden" name="_method" value="DELETE">
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar este usuário?');">Deletar Usuário</button>
-    </form>
-
-    <div class="mt-4">
-        <a href="{% url 'users-list' %}" class="btn btn-secondary">Voltar à Lista de Usuários</a>
     </div>
 </div>
 {% endblock %}

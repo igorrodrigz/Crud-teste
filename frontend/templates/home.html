@@ -4,17 +4,21 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Bem-vindo à Home da Aplicação!</h1>
-    <p class="text-center mb-5">Esta é a página inicial onde você pode encontrar acesso á lista de usuários cadastrados!</p>
+    <!-- Título e Introdução -->
+    <h1 class="text-center mb-4" style="font-size: 2.5rem; color: #007bff;">Bem-vindo à Home!</h1>
+    <p class="text-center mb-5" style="color: #555; font-size: 1.1rem;">
+        Explore nossos recursos e acesse a lista de usuários cadastrados facilmente.
+    </p>
 
-    <!-- Seção de Destaques - Centralizada e Redimensionada -->
+    <!-- Seção de Destaques -->
     <div class="row justify-content-center">
+        <!-- Cartão de Acesso à Lista de Usuários -->
         <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-0">
                 <div class="card-body text-center">
-                    <h5 class="card-title">Lista de Usuários</h5>
-                    <p class="card-text">Clique no botão abaixo para acessar a lista de usuários.</p>
-                    <a href="{% url 'users-list' %}" class="btn btn-primary">Acessar Lista</a>
+                    <h5 class="card-title" style="font-weight: bold; color: #007bff;">Lista de Usuários</h5>
+                    <p class="card-text" style="color: #777;">Clique abaixo para acessar a lista de todos os usuários cadastrados na aplicação.</p>
+                    <a href="{% url 'users-list' %}" class="btn btn-primary px-4 py-2" style="font-size: 1.1rem;">Acessar Lista</a>
                 </div>
             </div>
         </div>
