@@ -5,7 +5,6 @@ A nossa aplicação é uma plataforma de gerenciamento de usuários que facilita
 ## Índice
 - [Funcionalidades](#funcionalidades)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Instalação](#instalação)
 - [Uso](#uso)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 
