@@ -33,8 +33,13 @@ class SignupView(generics.CreateAPIView):
             user = serializer.save()
             messages.success(request, "Usuário cadastrado com sucesso.")
             return redirect('login')
-        messages.error(request, "Erro ao cadastrar usuário")
-        return render(request, 'signup.html', {'errors': serializer.errors})
+        else:
+            #especificar mensagem de erro
+            for field, errors in serializer.errors.items():
+                for error in errors:
+                    messages.error(request, "Erro ao cadastrar usuário")
+                    messages.error(request, f"{field}: {error}")
+            return render(request, 'signup.html', {'errors': serializer.errors})
 
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
