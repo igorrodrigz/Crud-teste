@@ -98,6 +98,11 @@ a:hover {
     padding: 10px;
     font-size: 0.9rem;
 }
+.alert-error {
+    background-color: indianred;
+    color: white;
+    border-color: #f5c6cb;
+}
 
 /* Texto de ajuda */
 .form-text {
