@@ -1,12 +1,20 @@
-# accounts/serializers.py
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
+from django.core.validators import RegexValidator
 from .models import User
 from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()  # Garantindo que o User correto seja utilizado
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True,
+        style={'input_type': 'password'},
+        validators=[RegexValidator(
+            regex=r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+            message=_("A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial.")
+        )]
+    )
     password2 = serializers.CharField(write_only=True, style={'input_type': 'password'})
 
     class Meta:

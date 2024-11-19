@@ -4,8 +4,8 @@ from django.contrib.auth import authenticate, login, logout  # Corrigido 'Login'
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User as AuthUser  # Evitando confusão com nosso User model
-from django.core.serializers import serialize
-from django.db.migrations import serializer
+from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import TemplateView
@@ -27,18 +27,19 @@ class SignupView(generics.CreateAPIView):
     def get(self, request, *args, **kwargs):
         return render(request, 'signup.html')
 
-
-
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            #return Response(serializer.data, status=status.HTTP_201_CREATED)
-            messages.success(request, "Usuário cadastrado com sucesso. ")
+            messages.success(request, "Usuário cadastrado com sucesso.")
             return redirect('login')
-        messages.error(request, "Erro ao cadastrar usuário")
-        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return render(request, 'signup.html', {'errors': serializer.errors})
+        else:
+            #especificar mensagem de erro
+            for field, errors in serializer.errors.items():
+                for error in errors:
+                    messages.error(request, "Erro ao cadastrar usuário")
+                    messages.error(request, f"{field}: {error}")
+            return render(request, 'signup.html', {'errors': serializer.errors})
 
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
@@ -53,30 +54,35 @@ class LoginView(generics.GenericAPIView):
         user = authenticate(email=email, password=password)
         if user is not None:
             login(request, user)  # Corrigido para usar a função 'login' do Django
-            # return Response({"message": "Login realizado com sucesso"}, status=status.HTTP_200_OK)
             messages.success(request, 'Login realizado com sucesso!')
             return redirect('home')
         else:
-            # return Response({"error": "Credenciais inválidas"}, status=status.HTTP_400_BAD_REQUEST)
             messages.error(request, 'Email ou senha incorretos!')
             return redirect('login')
 
 class HomePageView(LoginRequiredMixin, TemplateView):
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     template_name = 'home.html'
-
 
 class UserListView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]  # Você pode ajustar as permissões conforme necessário
+    permission_classes = [IsAuthenticated]  # Ajustar as permissões conforme necessário
     template_name = 'users-list.html'
 
     def get(self, request, *args, **kwargs):
+        query = request.GET.get('q')  # Captura o termo de busca
         users = self.get_queryset()
-        return render(request, self.template_name,{'users': users})
 
+        if query:
+            users = users.filter(first_name__icontains=query) | users.filter(email__icontains=query)
+
+        paginator = Paginator(users, 10)  # Pagina com 10 usuários por página
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(request, self.template_name, {'page_obj': page_obj, 'query': query})
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -87,35 +93,31 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
         obj = super().get_object()
         if self.request.user.is_superuser or obj == self.request.user:
             return obj
-        # Se o usuário não tiver permissão, exibe a mensagem e redireciona para a lista de usuários
         messages.error(self.request, 'Você não tem permissão para acessar esse usuário.')
-        return None
+        return HttpResponseRedirect(self.request.META.get('_REFERER', '/'))
 
     def get(self, request, *args, **kwargs):
         user = self.get_object()
-        # Redireciona se o usuário não tiver permissão
-        if not user:
-            return redirect('users-list')
+        if isinstance(user, HttpResponseRedirect):
+            return user
         return render(request, 'user-detail.html', {'user': user})
 
     def post(self, request, *args, **kwargs):
         user = self.get_object()
-        if not user:
-            return redirect('users-list')
-
-        # Atualização dos dados do usuário
-        user.first_name = request.POST.get('first_name')
-        user.email = request.POST.get('email')
-        user.save()
-
-        messages.success(request, 'Usuário atualizado com sucesso!')
+        if isinstance(user, HttpResponseRedirect):
+            return user
+        serializer = self.get_serializer(user, data=request.POST, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            messages.success(request, 'Usuário atualizado com sucesso!')
+            return redirect("user-detail", pk=user.pk)
+        messages.error(request, 'Erro ao atualizar usuário')
         return redirect("user-detail", pk=user.pk)
 
     def put(self, request, *args, **kwargs):
         user = self.get_object()
-        if not user:
-            return redirect('users-list')
-
+        if isinstance(user, HttpResponseRedirect):
+            return user
         serializer = self.get_serializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -124,9 +126,8 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         user = self.get_object()
-        if not user:
-            return redirect('users-list')
-
+        if isinstance(user, HttpResponseRedirect):
+            return user
         try:
             user.delete()
             messages.success(request, 'Usuário deletado com sucesso!')
@@ -136,11 +137,9 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
             return redirect('user-detail', pk=user.id)
 
     def dispatch(self, request, *args, **kwargs):
-        # Verifica o método HTTP
         if request.method == 'POST' and request.POST.get('_method') == 'DELETE':
             return self.delete(request, *args, **kwargs)
         return super().dispatch(request, *args, **kwargs)
-
 
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
